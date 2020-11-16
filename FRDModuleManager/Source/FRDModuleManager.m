@@ -290,6 +290,16 @@ handleActionWithIdentifier:identifier
 
 #pragma mark - Handling Continuing User Activity and Handling Quick Actions
 
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    BOOL result = NO;
+    for (id<FRDModule> module in self.modules) {
+      if ([module respondsToSelector:_cmd]) {
+        result = result || [module application:app openURL:url options:options];
+      }
+    }
+    return result;
+}
+
 - (BOOL)application:(UIApplication *)application
   willContinueUserActivityWithType:(NSString *)userActivityType
 {
